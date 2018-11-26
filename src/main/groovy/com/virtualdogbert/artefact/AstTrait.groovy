@@ -106,7 +106,7 @@ trait AstTrait {
                                                     new VariableExpression('this'),
                                                     new ConstantExpression(property.name)
                                             ),
-                                            Token.newSymbol(Types.EQUAL, 0, 0),
+                                            Token.newSymbol(Types.EQUAL, classNode.getLineNumber(), classNode.getColumnNumber()),
                                             new VariableExpression(property.name, property.type)
                                     )
                             )
@@ -129,7 +129,7 @@ trait AstTrait {
                                                     new VariableExpression('this'),
                                                     new ConstantExpression(field.name)
                                             ),
-                                            Token.newSymbol(Types.EQUAL, 0, 0),
+                                            Token.newSymbol(Types.EQUAL,  classNode.getLineNumber(), classNode.getColumnNumber()),
                                             new VariableExpression(field.name, field.type)
                                     )
                             )
@@ -137,8 +137,10 @@ trait AstTrait {
                 }
             }
 
+            ConstructorNode constructorNode = new ConstructorNode(Opcodes.ACC_PUBLIC, services.toArray(new Parameter[services.size()]), [] as ClassNode[], constructor)
+
             // Add injection constructor
-            classNode.addConstructor(new ConstructorNode(Opcodes.ACC_PUBLIC, services.toArray(new Parameter[services.size()]), [] as ClassNode[], constructor))
+            classNode.addConstructor(constructorNode)
         }
     }
 }

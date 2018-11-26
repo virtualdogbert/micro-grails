@@ -25,6 +25,7 @@ import com.virtualdogbert.artefact.*
 import groovy.transform.CompileStatic
 import org.codehaus.groovy.ast.ASTNode
 import org.codehaus.groovy.ast.ClassNode
+import org.codehaus.groovy.classgen.VariableScopeVisitor
 import org.codehaus.groovy.control.CompilePhase
 import org.codehaus.groovy.control.SourceUnit
 import org.codehaus.groovy.transform.AbstractASTTransformation
@@ -48,6 +49,7 @@ class GrailsConventionsASTTransformation extends AbstractASTTransformation imple
         }
 
         List<ClassNode> classes = sourceUnit.getAST().getClasses()
+        VariableScopeVisitor scopeVisitor = new VariableScopeVisitor(sourceUnit)
 
         classes.each { ClassNode node ->
             try {
@@ -66,6 +68,9 @@ class GrailsConventionsASTTransformation extends AbstractASTTransformation imple
                 if (ServiceArtefactHandler.isArtefact(node, sourceUnit.name, getConfig())) {
                     ServiceArtefactHandler.handleNode(node, getConfig())
                 }
+
+                scopeVisitor.visitClass(node)
+
             } catch (UrlMappingException e) {
                 addError(e.message, e.expression)
             }
