@@ -7,6 +7,7 @@ import org.codehaus.groovy.ast.expr.ClosureExpression
 import org.codehaus.groovy.ast.expr.MethodCall
 import org.codehaus.groovy.ast.stmt.EmptyStatement
 import org.codehaus.groovy.transform.stc.GroovyTypeCheckingExtensionSupport.TypeCheckingDSL
+
 /**
  *
  * @since 2.4
@@ -21,22 +22,25 @@ class DomainMappingTypeCheckingExtension extends TypeCheckingDSL {
 
         beforeVisitClass { ClassNode classNode ->
             def mappingProperty = classNode.getField('mapping')
-            if(mappingProperty && mappingProperty.isStatic() && mappingProperty.initialExpression instanceof ClosureExpression) {
+
+            if (mappingProperty && mappingProperty.isStatic() && mappingProperty.initialExpression instanceof ClosureExpression) {
                 def sourceUnit = classNode?.module?.context
-                if(DomainArtefactHandler.isArtefact(classNode, sourceUnit.name)) {
+
+                if (DomainArtefactHandler.isArtefact(classNode, sourceUnit.name)) {
                     newScope {
                         mappingClosureCode = mappingProperty.initialExpression.code
                     }
                     mappingProperty.initialExpression.code = new EmptyStatement()
+                    currentScope.checkingMappingClosure = true
                 }
             }
         }
 
         afterVisitClass { ClassNode classNode ->
-            if(currentScope.mappingClosureCode) {
+
+            if (currentScope.mappingClosureCode) {
                 def mappingProperty = classNode.getField('mapping')
                 mappingProperty.initialExpression.code = currentScope.mappingClosureCode
-                currentScope.checkingMappingClosure = true
                 withTypeChecker { visitClosureExpression mappingProperty.initialExpression }
                 scopeExit()
             }
@@ -44,8 +48,9 @@ class DomainMappingTypeCheckingExtension extends TypeCheckingDSL {
 
         methodNotFound { ClassNode receiver, String name, ArgumentListExpression argList, ClassNode[] argTypes, MethodCall call ->
             def dynamicCall
-            if(currentScope.mappingClosureCode && currentScope.checkingMappingClosure) {
-                dynamicCall = makeDynamic (call)
+
+            if (currentScope.mappingClosureCode && currentScope.checkingMappingClosure) {
+                dynamicCall = makeDynamic(call)
             }
             dynamicCall
         }

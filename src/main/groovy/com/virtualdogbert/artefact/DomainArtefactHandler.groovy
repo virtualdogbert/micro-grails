@@ -16,11 +16,11 @@
 
 package com.virtualdogbert.artefact
 
-
+import com.virtualdogbert.ast.MicroCompileStatic
 import grails.gorm.annotation.Entity
+import groovy.transform.CompileDynamic
 import groovy.transform.CompileStatic
 import org.codehaus.groovy.ast.ClassNode
-import org.codehaus.groovy.control.SourceUnit
 
 import java.util.regex.Pattern
 /**
@@ -57,11 +57,11 @@ class DomainArtefactHandler implements AstTrait {
         return url && DomainPathPattern.matcher(url.getFile()).find()
     }
 
-    static void handleNode(ClassNode classNode, SourceUnit sourceUnit, ConfigObject config) {
+    static void handleNode(ClassNode classNode, ConfigObject config) {
         addAnnotation(classNode, Entity, [Entity.simpleName])
-// TODO removing compile static for now because the compilation extension isn't working and I don't know how to fix it yet.
-//        if (config.compileStatic && !((List<String>) config.compileStaticExcludes).contains("${classNode.packageName}.$classNode.nameWithoutPackage".toString())) {
-//            addAnnotation(classNode, MicroCompileStatic, [CompileStatic.name, CompileDynamic.name, MicroCompileStatic.name])
-//        }
+
+        if (config.compileStatic && !((List<String>) config.compileStaticExcludes).contains("${classNode.packageName}.$classNode.nameWithoutPackage".toString())) {
+            addAnnotation(classNode, MicroCompileStatic, [CompileStatic.name, CompileDynamic.name, MicroCompileStatic.name])
+        }
     }
 }

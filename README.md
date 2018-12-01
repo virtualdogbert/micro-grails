@@ -142,7 +142,6 @@ is lighter weight, it may appeal to some, and also demonstrates how Grails works
 * Setup conventions file to be read in as configuration.
   * Setup urlMappings file to be read in as configuration, a simpler stand-in for now as compared to the Grails DSL.
   * Add MicronautCompileStatic, based on GrailsCompileStatic, with it's extensions.
-     * Still need to figure out how the extensions work because they don't work for Domain objects yet.
   * Set up Grails conventions Global AST transform delegating to artefact handlers(Domain, Controller, Service).
       * Domain
         * Add Entity annotation.
@@ -165,8 +164,6 @@ but no simpler.
 
 * Milestone 2
   * Add more defaults and error checking
-  * Fix extensions for MicronautCompileStatic
-     * https://github.com/grails/grails-core/tree/master/grails-core/src/main/groovy/org/grails/compiler
   * Add GormEntity Trait to Domain artefacts
      * http://gorm.grails.org/latest/api//org/grails/datastore/gorm/GormEntityApi.html
   * Write GDSL for GormEntity
