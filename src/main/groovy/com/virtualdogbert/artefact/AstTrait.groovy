@@ -85,7 +85,7 @@ trait AstTrait {
      *
      * @param classNode
      */
-    static void addServiceInjection(ClassNode classNode) {
+    static void addServiceInjection(ClassNode classNode, ConfigObject config) {
         if (classNode.declaredConstructors.size() == 0) {
             List<PropertyNode> properties = classNode.properties
             List<FieldNode> fields = classNode.fields
@@ -93,9 +93,8 @@ trait AstTrait {
             BlockStatement constructor = new BlockStatement()
 
             for (PropertyNode property : properties) {
-                List<AnnotationNode> annotations = property.type.annotations
 
-                if (annotations*.classNode.name.any { String n -> n in getBeanAnnotationNames() }) {
+                if (ServiceArtefactHandler.isArtefact(property.type, property.type.name, config)) {
                     Parameter service = new Parameter(property.type, property.name)
                     services << service
 
@@ -116,9 +115,8 @@ trait AstTrait {
 
 
             for (FieldNode field : fields) {
-                List<AnnotationNode> annotations = field.type.annotations
 
-                if (annotations*.classNode.name.any { String n -> n in getBeanAnnotationNames() }) {
+                if (ServiceArtefactHandler.isArtefact(field.type, field.type.name, config)) {
                     Parameter service = new Parameter(field.type, field.name)
                     services << service
 

@@ -52,8 +52,9 @@ class ServiceArtefactHandler implements ErrorHandler, AstTrait {
     }
 
     static void handleNode(ClassNode classNode, ConfigObject config) {
+
         //Inject Services
-        addServiceInjection(classNode)
+        addServiceInjection(classNode, config)
 
         addAnnotation(classNode, Singleton, getBeanAnnotationNames())
 

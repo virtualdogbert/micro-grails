@@ -65,7 +65,7 @@ class ControllerArtefactHandler implements ErrorHandler, AstTrait {
         List<MethodNode> methods = classNode.methods
 
         //Inject Services
-        addServiceInjection(classNode)
+        addServiceInjection(classNode, config)
 
         //Apply url mappings
         for (MethodNode methodNode : methods) {
