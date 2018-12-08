@@ -26,14 +26,14 @@ trait AstTrait {
 
     static ConfigObject getConventions() {
         ConfigSlurper configSlurper = new ConfigSlurper()
-        (ConfigObject) configSlurper.parse(new File(conventionsFile).toURL()).conventions
+        (ConfigObject) configSlurper.parse(new File(conventionsFile).toURI().toURL()).conventions
     }
 
     static ConfigObject getUrlMappings(){
         ConfigSlurper configSlurper = new ConfigSlurper()
         String rootPath = "${getConfig().rootPath}/${getConfig().controllerPath}"
         String urlMappings =  "${(String)getConfig().urlMappings}.groovy"
-        configSlurper.parse(new File(getURL(rootPath, urlMappings )).toURL())
+        configSlurper.parse(new File(getURL(rootPath, urlMappings )).toURI().toURL())
     }
 
     static String getURL(String base, String fileName) {
