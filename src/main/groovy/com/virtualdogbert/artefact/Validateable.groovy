@@ -24,5 +24,5 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 trait Validateable {
-    //TODO
+    //TODO for M2
 }

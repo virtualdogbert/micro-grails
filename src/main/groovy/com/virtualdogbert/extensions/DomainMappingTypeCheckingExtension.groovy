@@ -29,13 +29,12 @@ import org.codehaus.groovy.ast.stmt.EmptyStatement
 import org.codehaus.groovy.transform.stc.GroovyTypeCheckingExtensionSupport.TypeCheckingDSL
 
 /**
- *
- * @since 2.4
+ * The DomainMappingTypeCheckingExtension from Grails modified to check for the Micro Grails domain.
  */
 class DomainMappingTypeCheckingExtension extends TypeCheckingDSL {
 
     @Override
-    public Object run() {
+    Object run() {
         setup { newScope() }
 
         finish { scopeExit() }

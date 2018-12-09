@@ -27,7 +27,7 @@ import org.codehaus.groovy.ast.MethodNode
 
 import java.util.regex.Pattern
 /**
- * Grails artifact handler for command classes.
+ * Grails artifact handler for controller classes.
  *
  */
 @CompileStatic
@@ -37,6 +37,16 @@ class ControllerArtefactHandler implements AstTrait {
     static final List<String> methodNames          = [Get.simpleName, Post.simpleName, Put.simpleName, Delete.simpleName, Patch.simpleName, Head.simpleName, Options.simpleName, Trace.simpleName]
     static final List<String> annotationNames      = [Get.name, Post.name, Put.name, Delete.name, Patch.name, Head.name, Options.name, Trace.name]
 
+    /**
+     * Checks if a class node is a controller class. If debug mode is enabled through the config, then only the name of the classNode will be
+     * checked an not the file path from the source units name.
+     *
+     * @param classNode The class node to check.
+     * @param name the source unit name used to look up the file url.
+     * @param config The conventions config to use.
+     *
+     * @return true if the class node is a controller and false otherwise.
+     */
     static boolean isArtefact(ClassNode classNode, String name, ConfigObject config) {
         if (classNode == null ||
             !classNode.getName().endsWith(TYPE)) {
@@ -53,6 +63,13 @@ class ControllerArtefactHandler implements AstTrait {
         return url && ControllerPathPattern.matcher(url.getFile()).find()
     }
 
+    /**
+     * Handles applying the convention over configuration for controllers to a class node.
+     *
+     * @param classNode The class node to enhance with controller conventions like, url mapping and injection.
+     * @param urlMappings The URL mapping config to apply to the controller.
+     * @param config the conventions config which is used by the service injection.
+     */
     static void handleNode(ClassNode classNode, ConfigObject urlMappings, ConfigObject config) {
         String controllerName = classNode.nameWithoutPackage.replace('Controller', '').uncapitalize()
         String urlMapping = getUrlMapping(classNode, urlMappings, 'url', controllerName)
@@ -89,6 +106,16 @@ class ControllerArtefactHandler implements AstTrait {
         }
     }
 
+    /**
+     * Gets the url mapping for a classNode, for setting the controller annotation.
+     *
+     * @param classNode The classNode to get the urlMapping for.
+     * @param urlMapping The url mapping config.
+     * @param key The key to lookup in the url mapping.
+     * @param defaultMapping The controller name to lookup or the default mapping.
+     *
+     * @return The url mapping as a String.
+     */
     static String getUrlMapping(ClassNode classNode, ConfigObject urlMapping, String key, String defaultMapping) {
         if(hasAnnotation(classNode, [Controller.name])){
             return ''
@@ -104,6 +131,17 @@ class ControllerArtefactHandler implements AstTrait {
         return mapping ?: defaultMapping
     }
 
+    /**
+     * Gets the url mapping for a methodNode, for setting the method annotation(GET, POST, etc).
+     * .
+     * @param classNode The class node the method comes from, for error reporting.
+     * @param methodNode The method node to get the url mapping for.
+     * @param urlMapping The url mapping config.
+     * @param key The key to lookup in the url mapping.
+     * @param defaultMapping The method name to lookup or the default mapping.
+     *
+     * @return The url mapping as a String
+     */
     static String getUrlMapping(ClassNode classNode, MethodNode methodNode, ConfigObject urlMapping, String key, String defaultMapping) {
         if (hasAnnotation(methodNode, annotationNames)) {
             return ''

@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  *
- * Global AST to add Validateable to command objects
  */
 
 package com.virtualdogbert.ast

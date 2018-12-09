@@ -28,8 +28,7 @@ import org.codehaus.groovy.ast.stmt.EmptyStatement
 import org.codehaus.groovy.transform.stc.GroovyTypeCheckingExtensionSupport.TypeCheckingDSL
 
 /**
- *
- * @since 3.3
+ * The NamedQueryTypeCheckingExtension from Grails.
  */
 class NamedQueryTypeCheckingExtension extends TypeCheckingDSL {
 

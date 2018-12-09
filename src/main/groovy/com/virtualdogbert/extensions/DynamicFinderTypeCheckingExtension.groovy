@@ -29,8 +29,7 @@ import org.codehaus.groovy.transform.stc.GroovyTypeCheckingExtensionSupport.Type
 import static org.codehaus.groovy.ast.ClassHelper.*
 
 /**
- *
- * @since 2.4
+ * The DynamicFinderTypeCheckingExtension from Grails modified to check for the Micro Grails domain.
  */
 class DynamicFinderTypeCheckingExtension extends TypeCheckingDSL {
 

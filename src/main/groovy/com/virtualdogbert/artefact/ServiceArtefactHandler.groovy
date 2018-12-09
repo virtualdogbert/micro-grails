@@ -32,7 +32,7 @@ import javax.inject.Singleton
 import java.util.regex.Pattern
 
 /**
- * Grails artifact handler for command classes.
+ * Grails artifact handler for service classes.
  *
  */
 @CompileStatic
@@ -40,6 +40,16 @@ class ServiceArtefactHandler implements AstTrait {
     static final String REGEX_FILE_SEPARATOR = "[\\\\/]"
     static final String TYPE                 = "Service"
 
+    /**
+     * Checks to see if a class node is a service object. If debug mode is enabled through the config, then only the name of the classNode will be
+     * checked an not the file path from the source units name.
+     *
+     * @param classNode The class node to check.
+     * @param name the source unit name used to look up the file url.
+     * @param config The conventions config to use.
+     *
+     * @return true if the class node is a service and false otherwise.
+     */
     static boolean isArtefact(ClassNode classNode, String name, ConfigObject config) {
         if (classNode == null ||
             !classNode.getName().endsWith(TYPE)) {
@@ -56,6 +66,12 @@ class ServiceArtefactHandler implements AstTrait {
         return url && ServicePathPattern.matcher(url.getFile()).find()
     }
 
+    /**
+     * Handles applying the conventions to service objects, like adding @Transactional, @MicroCompileStatic, adding @Singleton, and doing service injection.
+     *
+     * @param classNode The class node for the service object.
+     * @param config The conventions config to use.
+     */
     static void handleNode(ClassNode classNode, ConfigObject config) {
 
         //Inject Services

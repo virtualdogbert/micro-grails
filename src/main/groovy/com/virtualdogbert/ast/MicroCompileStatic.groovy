@@ -23,6 +23,14 @@ package com.virtualdogbert.ast
 import groovy.transform.AnnotationCollector
 import groovy.transform.CompileStatic
 
+/**
+ * A compile static annotation that uses @CompileStatic with the extensions:
+ *    'com.virtualdogbert.extensions.NamedQueryTypeCheckingExtension',
+ *    'com.virtualdogbert.extensions.WhereQueryTypeCheckingExtension',
+ *    'com.virtualdogbert.extensions.DynamicFinderTypeCheckingExtension',
+ *    'com.virtualdogbert.extensions.DomainMappingTypeCheckingExtension'
+ *
+ */
 @AnnotationCollector
 @CompileStatic(extensions=['com.virtualdogbert.extensions.NamedQueryTypeCheckingExtension',
                            'com.virtualdogbert.extensions.WhereQueryTypeCheckingExtension',

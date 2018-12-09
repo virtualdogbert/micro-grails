@@ -29,7 +29,7 @@ import org.codehaus.groovy.ast.ClassNode
 
 import java.util.regex.Pattern
 /**
- * Grails artifact handler for command classes.
+ * Grails artifact handler for domain classes.
  *
  */
 @CompileStatic
@@ -37,6 +37,16 @@ class DomainArtefactHandler implements AstTrait {
     static final String REGEX_FILE_SEPARATOR = "[\\\\/]"
     static final String TYPE                 = "Domain"
 
+    /**
+     * Checks to see if a class node is a domain object.  If debug mode is enabled through the config, then only the name of the classNode will be
+     * checked an not the file path from the source units name.
+     *
+     * @param classNode The class node to check.
+     * @param name the source unit name used to look up the file url.
+     * @param config The conventions config to use.
+     *
+     * @return true if the class node is a domain and false otherwise.
+     */
     static boolean isArtefact(ClassNode classNode, String name, ConfigObject config = null) {
 
         if (classNode == null ||
@@ -62,6 +72,12 @@ class DomainArtefactHandler implements AstTrait {
         return url && DomainPathPattern.matcher(url.getFile()).find()
     }
 
+    /**
+     * Handles applying the conventions to domain objects, like adding @Entity, and @MicroCompileStatic.
+     *
+     * @param classNode The class node for the domain object.
+     * @param config The conventions config to use.
+     */
     static void handleNode(ClassNode classNode, ConfigObject config) {
         addAnnotation(classNode, Entity, [Entity.simpleName])
 

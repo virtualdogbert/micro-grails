@@ -22,10 +22,26 @@ package com.virtualdogbert.artefact
 
 import org.codehaus.groovy.ast.ASTNode
 
+/**
+ * An Exception for handling url mapping errors
+ */
 class UrlMappingException extends RuntimeException {
+    /**
+     * A message for the url mapping error
+     */
     String  message
+
+    /**
+     * The ASTNode expression that the error is attached to.
+     */
     ASTNode expression
 
+    /**
+     *  An Exception for handling url mapping errors
+     *
+     * @param message A message for the url mapping error
+     * @param expression  The ASTNode expression that the error is attached to.
+     */
     UrlMappingException(String message, ASTNode expression){
         super(message)
         this.message = message

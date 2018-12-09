@@ -35,6 +35,9 @@ import org.codehaus.groovy.syntax.Types
 import javax.inject.Singleton
 import java.util.regex.Pattern
 
+/**
+ * A trait to provide some common AST features dealing with configuration, conventions, and injections.
+ */
 @CompileStatic
 trait AstTrait {
     static final String       conventionsFile     = "conventions.groovy"
@@ -43,22 +46,53 @@ trait AstTrait {
     static       boolean      setupConfig         = true
     static final List<String> beanAnnotationNames = [Singleton.name, Context.name, Prototype.name, ThreadLocal.name]
 
-
+    /**
+     * Gets the conventions configurations for the library. This is called by the library itself, but also through CompileStatic extensions..
+     *
+     * @return A config object that holds the conventions.
+     */
     static ConfigObject getConventions() {
         ConfigSlurper configSlurper = new ConfigSlurper()
         (ConfigObject) configSlurper.parse(new File(conventionsFile).toURI().toURL()).conventions
     }
 
-    static ConfigObject getUrlMappings(){
+    /**
+     * This gets the url mapping as a config object. This is something that I'm open to replacing with a better DSL, but I didn't want to
+     * delay Milestone 1, to have a better implementation, which could come from someone else through a pull request.
+     *
+     * @return the url mapping as a config object
+     */
+    static ConfigObject getUrlMappings() {
         ConfigSlurper configSlurper = new ConfigSlurper()
         String rootPath = "${getConfig().rootPath}/${getConfig().controllerPath}"
-        String urlMappings =  "${(String)getConfig().urlMappings}.groovy"
-        configSlurper.parse(new File(getURL(rootPath, urlMappings )).toURI().toURL())
+        String urlMappings = "${(String) getConfig().urlMappings}.groovy"
+        configSlurper.parse(new File(getURL(rootPath, urlMappings)).toURI().toURL())
     }
 
+    /**
+     * This is used by the url mapping to file the url mapping file, because I don't know ahead of time where is will be package wise. so this
+     * is used to find the filename based on the configured root of the project(grails-app, micronaut-app,etc), and the urlMappings file name.
+     *
+     * @param base The root of the project (grails-app, micronaut-app,etc)
+     * @param fileName The name of the file to find, in a package structure.
+     *
+     * @return The filename as a string.
+     */
     static String getURL(String base, String fileName) {
         Pattern pattern = ~/${fileName}/
         new FileNameByRegexFinder().getFileNames(base, pattern.toString())[0]
+    }
+
+    /**
+     * Checks a class node to see if it has an annotation from a list of annotations.
+     *
+     * @param classNode The method node to check.
+     * @param annotations The list of annotations to check against.
+     *
+     * @return true if the class node as an annotation is the list to check, else false
+     */
+    static boolean hasAnnotation(ClassNode classNode, List<String> annotations){
+        classNode.annotations*.classNode.name.any { String n -> n in annotations }
     }
 
     /**
@@ -115,7 +149,8 @@ trait AstTrait {
      * This looks through the properties and fields of a classNode, and finds Fields/Properties with classes, that have annotations that are
      * considered injectable(See beanAnnotationNames above.). With  those  Fields/Properties a constructor is created for those Fields/Properties.
      *
-     * @param classNode
+     * @param classNode the class node to add injection to.
+     * @param config The conventions config that will be used by isArtefact checking for services to inject.
      */
     static void addServiceInjection(ClassNode classNode, ConfigObject config) {
         if (classNode.declaredConstructors.size() == 0) {

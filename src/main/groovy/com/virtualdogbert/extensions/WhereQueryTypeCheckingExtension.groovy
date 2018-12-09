@@ -27,9 +27,9 @@ import org.codehaus.groovy.ast.expr.ClassExpression
 import org.codehaus.groovy.ast.expr.MethodCall
 import org.codehaus.groovy.ast.expr.MethodCallExpression
 import org.codehaus.groovy.transform.stc.GroovyTypeCheckingExtensionSupport.TypeCheckingDSL
+
 /**
- *
- * @since 2.4.1
+ * The WhereQueryTypeCheckingExtension from Grails.
  */
 class WhereQueryTypeCheckingExtension extends TypeCheckingDSL {
 

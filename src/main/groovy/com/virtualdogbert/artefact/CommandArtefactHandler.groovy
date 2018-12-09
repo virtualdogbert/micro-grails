@@ -18,6 +18,7 @@
  *
  */
 
+
 package com.virtualdogbert.artefact
 
 import groovy.transform.CompileStatic
@@ -35,6 +36,14 @@ class CommandArtefactHandler {
     static final String REGEX_FILE_SEPARATOR = "[\\\\/]"
     static final String TYPE                 = "Command"
 
+    /**
+     * A check to see if a class node is a command object
+     *
+     * @param classNode The class node to check.
+     * @param name The name of the
+     * @param config
+     * @return
+     */
     static boolean isArtefact(ClassNode classNode, String name, ConfigObject config) {
         if (classNode == null ||
             !classNode.getName().endsWith(TYPE)) {
@@ -53,6 +62,7 @@ class CommandArtefactHandler {
 
     static void handleNode(ClassNode classNode, SourceUnit sourceUnit) {
         if (!classNode.interfaces*.name.contains('Validateable')) {
+            //TODO for M2
             //node.addInterface(new ClassNode(Validateable))
         }
     }
