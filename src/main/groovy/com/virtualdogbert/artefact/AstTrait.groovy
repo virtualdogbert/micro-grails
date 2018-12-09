@@ -115,20 +115,10 @@ trait AstTrait {
             for (PropertyNode property : properties) {
 
                 if (ServiceArtefactHandler.isArtefact(property.type, property.type.name, config)) {
-                    Parameter service = new Parameter(property.type, property.name)
-                    services << service
+                    services << new Parameter(property.type, property.name)
 
                     constructor.addStatement(
-                            new ExpressionStatement(
-                                    new BinaryExpression(
-                                            new PropertyExpression(
-                                                    new VariableExpression('this'),
-                                                    new ConstantExpression(property.name)
-                                            ),
-                                            Token.newSymbol(Types.EQUAL, classNode.getLineNumber(), classNode.getColumnNumber()),
-                                            new VariableExpression(property.name, property.type)
-                                    )
-                            )
+                            createAssignmentStatement(classNode, property.name, property.type)
                     )
                 }
             }
@@ -137,20 +127,10 @@ trait AstTrait {
             for (FieldNode field : fields) {
 
                 if (ServiceArtefactHandler.isArtefact(field.type, field.type.name, config)) {
-                    Parameter service = new Parameter(field.type, field.name)
-                    services << service
+                    services << new Parameter(field.type, field.name)
 
                     constructor.addStatement(
-                            new ExpressionStatement(
-                                    new BinaryExpression(
-                                            new PropertyExpression(
-                                                    new VariableExpression('this'),
-                                                    new ConstantExpression(field.name)
-                                            ),
-                                            Token.newSymbol(Types.EQUAL,  classNode.getLineNumber(), classNode.getColumnNumber()),
-                                            new VariableExpression(field.name, field.type)
-                                    )
-                            )
+                            createAssignmentStatement(classNode, field.name, field.type)
                     )
                 }
             }
@@ -160,5 +140,27 @@ trait AstTrait {
             // Add injection constructor
             classNode.addConstructor(constructorNode)
         }
+    }
+
+    /**
+     * Crates an expression statement for assigning this.service = service.
+     *
+     * @param classNode the parent classNode that the statement is being assigned.
+     * @param serviceName the name of the service.
+     * @param serviceType the ClassNode type of the service.
+     *
+     * @return The expression statement for this.service = service
+     */
+    static ExpressionStatement createAssignmentStatement(ClassNode classNode, String serviceName, ClassNode serviceType) {
+        new ExpressionStatement(
+                new BinaryExpression(
+                        new PropertyExpression(
+                                new VariableExpression('this'),
+                                new ConstantExpression(serviceName)
+                        ),
+                        Token.newSymbol(Types.EQUAL, classNode.getLineNumber(), classNode.getColumnNumber()),
+                        new VariableExpression(serviceName, serviceType)
+                )
+        )
     }
 }
