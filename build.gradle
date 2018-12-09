@@ -19,6 +19,9 @@ apply plugin:"com.github.johnrengelman.shadow"
 group = "com.virtualdogbert"
 version = "1.0.M1"
 description = "This library provides Grails conventions, over configuration, to Micronat projects."
+wrapper {
+    gradleVersion = '4.10.2'
+}
 
 // In this section you declare where to find the dependencies of your project
 repositories {
