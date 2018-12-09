@@ -36,7 +36,7 @@ import java.util.regex.Pattern
  *
  */
 @CompileStatic
-class ServiceArtefactHandler implements ErrorHandler, AstTrait {
+class ServiceArtefactHandler implements AstTrait {
     static final String REGEX_FILE_SEPARATOR = "[\\\\/]"
     static final String TYPE                 = "Service"
 

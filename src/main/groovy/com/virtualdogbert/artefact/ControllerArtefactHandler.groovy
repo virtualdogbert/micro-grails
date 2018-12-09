@@ -31,7 +31,7 @@ import java.util.regex.Pattern
  *
  */
 @CompileStatic
-class ControllerArtefactHandler implements ErrorHandler, AstTrait {
+class ControllerArtefactHandler implements AstTrait {
     static final String       REGEX_FILE_SEPARATOR = "[\\\\/]"
     static final String       TYPE                 = "Controller"
     static final List<String> methodNames          = [Get.simpleName, Post.simpleName, Put.simpleName, Delete.simpleName, Patch.simpleName, Head.simpleName, Options.simpleName, Trace.simpleName]
