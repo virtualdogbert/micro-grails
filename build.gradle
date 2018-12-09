@@ -13,12 +13,11 @@ ext {
     gormVersion = '6.1.9.RELEASE'
 }
 
-//apply plugin:"io.spring.dependency-management"
-apply plugin:"com.github.johnrengelman.shadow"
 
 group = "com.virtualdogbert"
 version = "1.0.M1"
-description = "This library provides Grails conventions, over configuration, to Micronat projects."
+description = "This library provides Grails conventions, over configuration, to Micronaut projects."
+
 wrapper {
     gradleVersion = '4.10.2'
 }
@@ -37,7 +36,7 @@ dependencyManagement {
 
 dependencies {
     compileOnly(
-            'org.codehaus.groovy:groovy-all:2.5.0',
+            'org.codehaus.groovy:groovy-all:2.5.4',
             'org.slf4j:slf4j-api:1.6.1',
             'ch.qos.logback:logback-classic:0.9.28'
     )
@@ -46,7 +45,6 @@ dependencies {
     compileOnly "io.micronaut:micronaut-http-client"
     compileOnly "io.micronaut:micronaut-http-server-netty"
     compileOnly "io.micronaut:micronaut-runtime-groovy"
-
     compileOnly "io.micronaut:micronaut-inject-groovy"
 
     //tag::gorm[]
@@ -63,8 +61,7 @@ dependencies {
     testCompile(
             'junit:junit:4.12',
             'org.codehaus.groovy:groovy-all:2.5.1',
-            'ch.qos.logback:logback-classic:0.9.28',
-            'org.yaml:snakeyaml:1.18'
+            'ch.qos.logback:logback-classic:0.9.28'
     )
 
 
@@ -76,7 +73,7 @@ task sourceJar(type: Jar) {
 }
 
 ext {
-    theTitle = 'Grails Micronaut Conventions'
+    theTitle = 'Micro Grails'
     titleForDocumentation = archivesBaseName + ' ' + version
     packageTitle = group
     description = description
@@ -209,19 +206,13 @@ tasks.withType(AsciidoctorTask) {
     }
 }
 
-task asciidoc(type: AsciidoctorTask, description: 'Generates single-page HTML, and PDF') {
-    backends 'html5', 'pdf'
+task asciidoc(type: AsciidoctorTask, description: 'Generates single-page HTML') {
+    backends 'html5'
 }
 
 task docs(dependsOn: [asciidoc]) {
 
     File dir = new File(buildDir, 'docs')
-    ['pdf'].each { String ext ->
-        File f = new File(dir, 'index.' + ext)
-        if (f.exists()) {
-            f.renameTo new File(dir, project.name + '-' + project.version + '.' + ext)
-        }
-    }
 
     copy {
         from 'src/docs'
