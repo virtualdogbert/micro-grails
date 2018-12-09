@@ -69,7 +69,7 @@ class ControllerArtefactHandler implements AstTrait {
 
         //Apply url mappings
         for (MethodNode methodNode : methods) {
-            if (methodNode.isPrivate()) {
+            if (methodNode.isPrivate() || hasAnnotation(methodNode, annotationNames)) {
                 break
             }
 
@@ -90,6 +90,10 @@ class ControllerArtefactHandler implements AstTrait {
     }
 
     static String getUrlMapping(ClassNode classNode, ConfigObject urlMapping, String key, String defaultMapping) {
+        if(hasAnnotation(classNode, [Controller.name])){
+            return ''
+        }
+
         ConfigObject controllerMapping = (ConfigObject) urlMapping[defaultMapping]
 
         if (!controllerMapping) {
@@ -101,6 +105,10 @@ class ControllerArtefactHandler implements AstTrait {
     }
 
     static String getUrlMapping(ClassNode classNode, MethodNode methodNode, ConfigObject urlMapping, String key, String defaultMapping) {
+        if (hasAnnotation(methodNode, annotationNames)) {
+            return ''
+        }
+
         ConfigObject controllerMapping = (ConfigObject) urlMapping[methodNode.name]
 
         if (!controllerMapping) {

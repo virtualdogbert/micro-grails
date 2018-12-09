@@ -62,6 +62,18 @@ trait AstTrait {
     }
 
     /**
+     * Checks a method node to see if it has an annotation from a list of annotations.
+     *
+     * @param methodNode The method node to check.
+     * @param annotations The list of annotations to check against.
+     *
+     * @return true if the method node as an annotation is the list to check, else false
+     */
+    static boolean hasAnnotation(MethodNode methodNode, List<String> annotations) {
+        methodNode.annotations*.classNode.name.any { String n -> n in annotations }
+    }
+
+    /**
      * Adds an annotation to a class node, if it doesn't already have that annotation, with a constant value.
      *
      * @param classNode The class node to add th annotation to.
@@ -69,7 +81,7 @@ trait AstTrait {
      * @param value The optional value to set for the annotation
      */
     static void addAnnotation(ClassNode classNode, Class annotation, List<String> annotations, String value = null) {
-        if (!(classNode.annotations*.classNode.name.any { String n -> n in annotations })) {
+        if (!hasAnnotation(classNode, annotations)) {
 
             AnnotationNode classAnnotation = new AnnotationNode(new ClassNode(annotation))
 
@@ -89,7 +101,7 @@ trait AstTrait {
      * @param value The optional value to set for the annotation
      */
     static void addAnnotation(MethodNode methodNode, AnnotationNode annotationNode, List<String> annotations, String value = null) {
-        if (!(methodNode.annotations*.classNode.name.any { String n -> n in annotations })) {
+        if (!hasAnnotation(methodNode, annotations)) {
 
             if (value) {
                 annotationNode.addMember('value', (Expression) (new ConstantExpression(value)))
