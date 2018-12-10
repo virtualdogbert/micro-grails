@@ -25,17 +25,15 @@ import org.codehaus.groovy.ast.AnnotationNode
 import org.codehaus.groovy.ast.ClassNode
 import org.codehaus.groovy.ast.MethodNode
 
-import java.util.regex.Pattern
 /**
  * Grails artifact handler for controller classes.
  *
  */
 @CompileStatic
 class ControllerArtefactHandler implements AstTrait {
-    static final String       REGEX_FILE_SEPARATOR = "[\\\\/]"
-    static final String       TYPE                 = "Controller"
-    static final List<String> methodNames          = [Get.simpleName, Post.simpleName, Put.simpleName, Delete.simpleName, Patch.simpleName, Head.simpleName, Options.simpleName, Trace.simpleName]
-    static final List<String> annotationNames      = [Get.name, Post.name, Put.name, Delete.name, Patch.name, Head.name, Options.name, Trace.name]
+    static final String       TYPE            = "Controller"
+    static final List<String> methodNames     = [Get.simpleName, Post.simpleName, Put.simpleName, Delete.simpleName, Patch.simpleName, Head.simpleName, Options.simpleName, Trace.simpleName]
+    static final List<String> annotationNames = [Get.name, Post.name, Put.name, Delete.name, Patch.name, Head.name, Options.name, Trace.name]
 
     /**
      * Checks if a class node is a controller class. If debug mode is enabled through the config, then only the name of the classNode will be
@@ -57,10 +55,7 @@ class ControllerArtefactHandler implements AstTrait {
             return true
         }
 
-        Pattern ControllerPathPattern = Pattern.compile(".+${REGEX_FILE_SEPARATOR}$config.rootPath${REGEX_FILE_SEPARATOR}$config.controllerPath${REGEX_FILE_SEPARATOR}(.+)\\.(groovy)")
-        URL url = new File(name).toURL()
-
-        return url && ControllerPathPattern.matcher(url.getFile()).find()
+        return name.contains("/$config.rootPath/$config.controllerPath/") && name.endsWith("${TYPE}.groovy")
     }
 
     /**
@@ -91,7 +86,7 @@ class ControllerArtefactHandler implements AstTrait {
             }
 
             urlMapping = getUrlMapping(classNode, methodNode, (ConfigObject) urlMappings[controllerName], 'url', methodNode.name)
-            String producesMapping = getUrlMapping(classNode,  methodNode, (ConfigObject) urlMappings[controllerName], 'produces', MediaType.APPLICATION_JSON)
+            String producesMapping = getUrlMapping(classNode, methodNode, (ConfigObject) urlMappings[controllerName], 'produces', MediaType.APPLICATION_JSON)
             String method = getUrlMapping(classNode, methodNode, (ConfigObject) urlMappings[controllerName], 'method', methodNode.name).toLowerCase().capitalize()
 
             if (!(method in methodNames)) {
@@ -117,7 +112,7 @@ class ControllerArtefactHandler implements AstTrait {
      * @return The url mapping as a String.
      */
     static String getUrlMapping(ClassNode classNode, ConfigObject urlMapping, String key, String defaultMapping) {
-        if(hasAnnotation(classNode, [Controller.name])){
+        if (hasAnnotation(classNode, [Controller.name])) {
             return ''
         }
 

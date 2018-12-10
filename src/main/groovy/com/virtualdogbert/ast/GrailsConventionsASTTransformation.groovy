@@ -64,7 +64,7 @@ class GrailsConventionsASTTransformation extends AbstractASTTransformation imple
                     DomainArtefactHandler.handleNode(node, getConfig())
                 }
 
-                if (ServiceArtefactHandler.isArtefact(node, sourceUnit.name, getConfig())) {
+                if (ServiceArtefactHandler.isArtefact(node)) {
                     ServiceArtefactHandler.handleNode(node, getConfig())
                 }
 

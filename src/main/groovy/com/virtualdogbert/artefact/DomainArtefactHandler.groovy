@@ -27,15 +27,13 @@ import groovy.transform.CompileDynamic
 import groovy.transform.CompileStatic
 import org.codehaus.groovy.ast.ClassNode
 
-import java.util.regex.Pattern
 /**
  * Grails artifact handler for domain classes.
  *
  */
 @CompileStatic
 class DomainArtefactHandler implements AstTrait {
-    static final String REGEX_FILE_SEPARATOR = "[\\\\/]"
-    static final String TYPE                 = "Domain"
+    static final String TYPE = "Domain"
 
     /**
      * Checks to see if a class node is a domain object.  If debug mode is enabled through the config, then only the name of the classNode will be
@@ -66,10 +64,7 @@ class DomainArtefactHandler implements AstTrait {
             return true
         }
 
-        Pattern DomainPathPattern = Pattern.compile(".+${REGEX_FILE_SEPARATOR}$config.rootPath${REGEX_FILE_SEPARATOR}$config.domainPath${REGEX_FILE_SEPARATOR}(.+)\\.(groovy)")
-        URL url = new File(name).toURL()
-
-        return url && DomainPathPattern.matcher(url.getFile()).find()
+        return name.contains("/$config.rootPath/$config.domainPath/") && name.endsWith("${TYPE}.groovy")
     }
 
     /**

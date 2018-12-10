@@ -25,16 +25,13 @@ import groovy.transform.CompileStatic
 import org.codehaus.groovy.ast.ClassNode
 import org.codehaus.groovy.control.SourceUnit
 
-import java.util.regex.Pattern
-
 /**
  * Grails artifact handler for command classes.
  *
  */
 @CompileStatic
 class CommandArtefactHandler {
-    static final String REGEX_FILE_SEPARATOR = "[\\\\/]"
-    static final String TYPE                 = "Command"
+    static final String TYPE = "Command"
 
     /**
      * A check to see if a class node is a command object
@@ -54,10 +51,7 @@ class CommandArtefactHandler {
             return true
         }
 
-        Pattern CommandPathPattern = Pattern.compile(".+${REGEX_FILE_SEPARATOR}$config.rootPath${REGEX_FILE_SEPARATOR}$config.command${REGEX_FILE_SEPARATOR}(.+)\\.(groovy)")
-        URL url = new File(name).toURL()
-
-        return url && CommandPathPattern.matcher(url.getFile()).find()
+        return name.contains("/$config.rootPath/$config.commandPath/") && name.endsWith("${TYPE}.groovy")
     }
 
     static void handleNode(ClassNode classNode, SourceUnit sourceUnit) {

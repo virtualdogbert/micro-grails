@@ -161,7 +161,7 @@ trait AstTrait {
 
             for (PropertyNode property : properties) {
 
-                if (ServiceArtefactHandler.isArtefact(property.type, property.type.name, config)) {
+                if (ServiceArtefactHandler.isArtefact(property.type)) {
                     services << new Parameter(property.type, property.name)
 
                     constructor.addStatement(
@@ -173,7 +173,7 @@ trait AstTrait {
 
             for (FieldNode field : fields) {
 
-                if (ServiceArtefactHandler.isArtefact(field.type, field.type.name, config)) {
+                if (ServiceArtefactHandler.isArtefact(field.type)) {
                     services << new Parameter(field.type, field.name)
 
                     constructor.addStatement(

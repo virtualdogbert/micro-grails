@@ -29,41 +29,28 @@ import groovy.transform.CompileStatic
 import org.codehaus.groovy.ast.ClassNode
 
 import javax.inject.Singleton
-import java.util.regex.Pattern
-
 /**
  * Grails artifact handler for service classes.
  *
  */
 @CompileStatic
 class ServiceArtefactHandler implements AstTrait {
-    static final String REGEX_FILE_SEPARATOR = "[\\\\/]"
     static final String TYPE                 = "Service"
 
     /**
-     * Checks to see if a class node is a service object. If debug mode is enabled through the config, then only the name of the classNode will be
-     * checked an not the file path from the source units name.
+     * Checks to see if a class node is a service object. For services it only checks by name, because I don't always have the source unit of the file
      *
      * @param classNode The class node to check.
-     * @param name the source unit name used to look up the file url.
-     * @param config The conventions config to use.
      *
      * @return true if the class node is a service and false otherwise.
      */
-    static boolean isArtefact(ClassNode classNode, String name, ConfigObject config) {
+    static boolean isArtefact(ClassNode classNode) {
         if (classNode == null ||
             !classNode.getName().endsWith(TYPE)) {
             return false
         }
 
-        if (config.debug && classNode.getName().endsWith(TYPE)) {
-            return true
-        }
-
-        Pattern ServicePathPattern = Pattern.compile(".+${REGEX_FILE_SEPARATOR}$config.rootPath${REGEX_FILE_SEPARATOR}$config.servicePath${REGEX_FILE_SEPARATOR}(.+)\\.(groovy)")
-        URL url = new File(name).toURL()
-
-        return url && ServicePathPattern.matcher(url.getFile()).find()
+        return true
     }
 
     /**
