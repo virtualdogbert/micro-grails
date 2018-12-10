@@ -3,8 +3,13 @@ micro-grails
 This library for [Micronaut](http://micronaut.io/) brings some of the convention over configuration Grails has to Micronaut projects.
 
 ## Installation
-Use the gradle plugin, rather than using the library directly:
+Use the gradle plugin, rather than using the library directly:\
 [Micro Grails plugin](https://github.com/virtualdogbert/micro-grails-plugin/)
+
+## Sample app
+To see the library in use check out this sample app:
+
+[test-ast-micro](https://github.com/virtualdogbert/test-ast-micro)
 
 ## Usage
 ### Config
@@ -156,6 +161,7 @@ is lighter weight, it may appeal to some, and also demonstrates how Grails works
          * Add Transactional annotation based on conventions configuration.
 * Add source directories using Gradle.
 * Add console task using Gradle.
+* Add Gradle Task for default conventions setup
 * Add ReadME documentation.
 
 ## Ideas for next Release
@@ -166,7 +172,7 @@ but no simpler.
   * Add more defaults and error checking
   * Add GormEntity Trait to Domain artefacts
      * http://gorm.grails.org/latest/api//org/grails/datastore/gorm/GormEntityApi.html
-  * Write GDSL for GormEntity
+  * Write GDSL for GormEntity or investigate making an Intellij plugin, because of the limitation is GDSL.
   * Implement Validateable trait for validating command objects.
      * https://github.com/grails/grails-data-mapping/blob/master/grails-datastore-gorm-validation/src/main/groovy/grails/gorm/validation/DefaultConstrainedProperty.groovy
      * https://github.com/grails/grails-data-mapping/blob/master/grails-datastore-gorm-validation/src/main/groovy/grails/gorm/validation/ConstrainedProperty.groovy
@@ -197,6 +203,8 @@ but no simpler.
   * Implement Interceptors
   * Implement artefact traits
      * http://docs.grails.org/latest/guide/traits.html
-  * Implement GDSL for artefact traits
+  * Implement GDSL for artefact traits or write Intellij plugin
+  * Add support for view rendering convention...
+  * Add the ability to add artefacts using the conventions config.
   * Write cli/gradle tasks for generating artefacts.
   * Update documentation and add asciidoc
