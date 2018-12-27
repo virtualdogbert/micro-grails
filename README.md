@@ -35,7 +35,7 @@ conventions = [
 ]
 ```
  This sets up the conventions that the library will use:
- * rootPath - think of this as your grail-app directory, although in the example I made it micronaut-app.
+ * rootPath - think of this as your grails-app directory, although in the example I made it micronaut-app.
  * controllerPath - This will be the directory under the root path, where you will put your controllers.
  * commandPath - For Milestone 2 this will be where you put command objects used for binding in controller classes.
  * domainPath - This will be the folder under the root path, where you will put your domain classes.
